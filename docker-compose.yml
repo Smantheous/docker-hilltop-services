@@ -133,7 +133,7 @@ services:
             - OPENVPN_USERNAME=${VPN_USERNAME}
             - OPENVPN_PASSWORD=${VPN_PASSWORD}
             - WEBPROXY_ENABLED=false
-            - LOCAL_NETWORK=192.168.1.0/24
+            - LOCAL_NETWORK=10.0.0.0/8
             - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
             - TRANSMISSION_RPC_USERNAME=${RPC_USERNAME}
             - TRANSMISSION_RPC_PASSWORD=${RPC_PASSWORD}
@@ -184,15 +184,15 @@ services:
             - ${LOCAL_STORAGE}/wireguard-server/config:/config
             - /lib/modules:/lib/modules           
             
-    unify-controller:
+    unifi-controller:
         image: ghcr.io/linuxserver/unifi-controller
-        container_name: unify-controller
+        container_name: unifi-controller
         restart: always
         environment:
             - PUID=${PUID}
             - PGID=${PUID}
         volumes:
-            - ${LOCAL_STORAGE}/unify-controller/config:/config
+            - ${LOCAL_STORAGE}/unifi-controller/config:/config
         ports:
             - 3478:3478/udp
             - 10001:10001/udp

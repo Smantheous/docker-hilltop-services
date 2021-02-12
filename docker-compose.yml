@@ -86,7 +86,7 @@ services:
             - ${LOCAL_STORAGE}/plex/config:/config
             - ${LOCAL_STORAGE}/plex/transcode:/transcode
             - ${PLEX_MEDIA_LOCATION}:/data
-            - ${DREW_PHOTO_LOCATION}:/data/drewphoto
+            - ${Matt_PHOTO_LOCATION}:/data/mattphotos
             - ${FAMILY_PHOTO_LOCATION}:/data/familyphotos
             - ${HOME_VIDEO_LOCATION}:/data/homevideo
 
@@ -119,7 +119,7 @@ services:
             - ${LOCAL_STORAGE}/sonarr/config:/config
             - ${PLEX_MEDIA_LOCATION}:/tv
             - ${LOCAL_STORAGE}/sonarr/downloads:/downloads
-
+            
     transmission-openvpn:
         image: haugene/transmission-openvpn
         container_name: haugene
@@ -133,7 +133,7 @@ services:
             - OPENVPN_USERNAME=${VPN_USERNAME}
             - OPENVPN_PASSWORD=${VPN_PASSWORD}
             - WEBPROXY_ENABLED=false
-            - LOCAL_NETWORK=10.0.0.0/8
+            - LOCAL_NETWORK=192.168.1.0/24
             - TRANSMISSION_RPC_AUTHENTICATION_REQUIRED=true
             - TRANSMISSION_RPC_USERNAME=${RPC_USERNAME}
             - TRANSMISSION_RPC_PASSWORD=${RPC_PASSWORD}
@@ -182,8 +182,24 @@ services:
             - net.ipv4.conf.all.src_valid_mark=1
         volumes:
             - ${LOCAL_STORAGE}/wireguard-server/config:/config
-            - /lib/modules:/lib/modules  
-
+            - /lib/modules:/lib/modules           
+            
+    unify-controller:
+        image: ghcr.io/linuxserver/unifi-controller
+        container_name: unify-controller
+        restart: always
+        environment:
+            - PUID=${PUID}
+            - PGID=${PUID}
+        volumes:
+            - ${LOCAL_STORAGE}/unify-controller/config:/config
+        ports:
+            - 3478:3478/udp
+            - 10001:10001/udp
+            - 8080:8080
+            - 8443:8443
+       restart: unless-stopped
+        
 networks:
     web:
         external: true

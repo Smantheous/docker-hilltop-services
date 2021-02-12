@@ -191,6 +191,7 @@ services:
         environment:
             - PUID=${PUID}
             - PGID=${PUID}
+            - MEM_LIMIT=${1024M} #optional
         volumes:
             - ${LOCAL_STORAGE}/unifi-controller/config:/config
         ports:
